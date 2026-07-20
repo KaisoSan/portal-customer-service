@@ -1,0 +1,575 @@
+<style>
+
+/* ==================================================
+   Portal Customer Service Digital
+   BNI KC Situbondo
+   Version 1.0
+================================================== */
+
+/* ===============================
+   Color Palette
+================================= */
+
+:root{
+
+  --primary:#F37021;
+  --primary-dark:#D95E17;
+
+  --secondary:#003D79;
+
+  --background:#F8F9FA;
+
+  --white:#FFFFFF;
+
+  --text:#343A40;
+
+  --border:#DEE2E6;
+
+  --shadow:0 .5rem 1rem rgba(0,0,0,.10);
+
+  --radius:16px;
+
+}
+
+/* ===============================
+   Global
+================================= */
+
+body{
+
+  background:var(--background);
+
+  color:var(--text);
+
+  font-family:Arial, Helvetica, sans-serif;
+
+}
+
+/* ===============================
+   Main Container
+================================= */
+
+#app{
+
+  min-height:100vh;
+
+}
+
+/* ===============================
+   Utility
+================================= */
+
+.portal-shadow{
+
+  box-shadow:var(--shadow);
+
+}
+
+.portal-radius{
+
+  border-radius:var(--radius);
+
+}
+
+.portal-bg-primary{
+
+  background:var(--primary);
+
+}
+
+.portal-text-primary{
+
+  color:var(--primary);
+
+}
+
+/* ==========================================
+   NAVBAR
+========================================== */
+
+.portal-logo{
+
+    height:42px;
+
+    width:auto;
+
+}
+
+.portal-title{
+
+    font-size:1rem;
+
+    font-weight:700;
+
+    color:#0A2F6B;
+
+    line-height:1.1;
+
+}
+
+.portal-subtitle{
+
+    color:#666;
+
+    font-size:.8rem;
+
+}
+
+.navbar{
+
+    padding:12px 0;
+
+}
+
+/* ===============================
+   Hero
+================================= */
+
+.hero-section{
+
+    background:linear-gradient(
+        180deg,
+        #FFF4EC 0%,
+        #FFFFFF 100%
+    );
+
+    padding:60px 20px;
+
+}
+
+.hero-description{
+
+    max-width:700px;
+
+    margin:auto;
+
+    font-size:1.1rem;
+
+    color:#6c757d;
+
+}
+
+.hero-badge{
+
+    display:flex;
+
+    justify-content:center;
+
+    gap:12px;
+
+    flex-wrap:wrap;
+
+}
+
+/* ===============================
+   Services
+================================= */
+
+.service-card{
+
+    transition:.3s ease;
+
+    border:none;
+
+    overflow:hidden;
+
+}
+
+.service-card:hover{
+
+    transform:translateY(-8px);
+
+    box-shadow:0 15px 35px rgba(0,0,0,.15);
+
+}
+
+.service-icon{
+
+    width:80px;
+
+    height:80px;
+
+    margin:auto;
+
+    border-radius:50%;
+
+    background:#FFF4EC;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    color:var(--primary);
+
+    font-size:2rem;
+
+    margin-bottom:20px;
+
+}
+
+.service-button{
+
+    border-radius:50px;
+
+    padding:10px 30px;
+
+    font-weight:600;
+
+}
+
+/* ===============================
+   Footer
+================================= */
+
+.portal-footer{
+
+    background:#ffffff;
+
+    text-align:center;
+
+    padding:50px 20px;
+
+    margin-top:60px;
+
+}
+
+.portal-footer h4{
+
+    font-weight:700;
+
+    color:#1f2d3d;
+
+}
+
+.portal-footer p{
+
+    color:#6c757d;
+
+    margin:0;
+
+}
+
+.build-version{
+
+    display:inline-block;
+
+    margin-top:15px;
+
+    padding:6px 14px;
+
+    border-radius:999px;
+
+    background:#f3f4f6;
+
+    color:#6c757d;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.portal-footer hr{
+
+    max-width:600px;
+
+    margin:auto;
+
+}
+
+/* ==================================
+   Logo
+================================== */
+
+.hero-logo{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    margin-bottom:25px;
+}
+
+.portal-logo{
+    width:180px;
+    height:auto;
+}
+
+/* ===================================
+   QUICK ACCESS
+=================================== */
+
+.quick-btn{
+
+    border-radius:18px;
+
+    padding:18px;
+
+    font-size:18px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.quick-btn i{
+
+    font-size:32px;
+
+    margin-bottom:8px;
+
+}
+
+.quick-btn:hover{
+
+    transform:translateY(-5px);
+
+}
+
+/* ===================================
+   COMING SOON
+=================================== */
+
+.coming-card{
+
+    background:#fff;
+
+    border-radius:20px;
+
+    padding:35px 20px;
+
+    text-align:center;
+
+    box-shadow:0 8px 20px rgba(0,0,0,.08);
+
+    transition:.3s;
+
+    cursor:not-allowed;
+
+    height:100%;
+
+}
+
+.coming-card:hover{
+
+    transform:translateY(-8px);
+
+}
+
+.coming-card i{
+
+    font-size:42px;
+
+    color:#f37021;
+
+    margin-bottom:15px;
+
+}
+
+.coming-card h5{
+
+    font-weight:700;
+
+    margin-bottom:15px;
+
+}
+
+/* ==========================================
+   DASHBOARD
+========================================== */
+
+.dashboard-card{
+
+    border: none;
+
+    border-radius:16px;
+
+    transition:0.3s;
+
+    box-shadow:0 4px 15px rgba(0,0,0,.08);
+
+    min-height:220px;
+
+}
+
+.dashboard-card:hover{
+
+    transform:translateY(-6px);
+
+    box-shadow:0 10px 30px rgba(0,0,0,.15);
+
+}
+
+.dashboard-icon{
+
+    font-size:34px;
+
+    margin-bottom:15px;
+
+}
+
+.dashboard-number{
+
+    font-size:52px;
+
+    font-weight:700;
+
+}
+
+.dashboard-card h6{
+
+    color:#666;
+
+    font-weight:600;
+
+}
+
+.bg-total{
+
+    background:#F8F4FF;
+    border-top:5px solid #7E57C2;
+
+}
+
+.bg-waiting{
+
+    background:#FFF7D6;
+    border-top:5px solid #F4B400;
+
+}
+
+.bg-received{
+
+    background:#FFE8D8;
+    border-top:5px solid #F37021;
+
+}
+
+.bg-process{
+
+    background:#EAF2FF;
+    border-top:5px solid #4285F4;
+
+}
+
+.bg-followup{
+
+    background:#FFF0E4;
+    border-top:5px solid #FB8C00;
+
+}
+
+.bg-finished{
+
+    background:#E7F8EC;
+    border-top:5px solid #34A853;
+
+}
+
+.bg-closed{
+
+    background:#ECECEC;
+    border-top:5px solid #444;
+
+}
+
+/* ==========================================
+   CHART LEGEND
+========================================== */
+
+#chartLegend strong{
+
+    color:#F37021;
+
+    font-weight:700;
+
+}
+
+/* ==========================================
+   ABOUT
+========================================== */
+
+.quote-text{
+
+    font-size:1.2rem;
+
+    font-style:italic;
+
+    font-weight:500;
+
+    color:#555;
+
+    line-height:1.8;
+
+}
+
+.quote-author{
+
+    color:#888;
+
+    font-size:.95rem;
+
+    margin-top:10px;
+
+}
+
+.list-group-item{
+
+    background:transparent;
+
+    font-size:1rem;
+
+}
+
+#about .card-body p{
+
+    line-height:1.8;
+
+}
+
+/* ==========================================
+   FAQ
+========================================== */
+
+#faq .accordion-item{
+
+    border:none;
+
+    margin-bottom:15px;
+
+    border-radius:15px;
+
+    overflow:hidden;
+
+    box-shadow:0 5px 15px rgba(0,0,0,.06);
+
+}
+
+#faq .accordion-button{
+
+    font-weight:600;
+
+    padding:20px;
+
+    background:#fff;
+
+}
+
+#faq .accordion-button:not(.collapsed){
+
+    background:#fff7e6;
+
+    color:#f37021;
+
+}
+
+#faq .accordion-body{
+
+    line-height:1.8;
+
+    background:#fff;
+
+}
+
+</style>

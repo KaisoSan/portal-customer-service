@@ -1,0 +1,340 @@
+<script>
+
+let APP = {};
+
+window.onload = function () {
+
+  google.script.run
+    .withSuccessHandler(function(config) {
+
+      APP = config;
+
+      console.log("Konfigurasi berhasil dimuat");
+      console.log(APP);
+
+    })
+    .getConfig();
+
+  google.script.run
+    .withSuccessHandler(loadDashboard)
+    .getDashboardData();
+
+};
+
+function openSIMPLI() {
+
+    window.open(APP.FORMS.SIMPLI, "_blank");
+
+}
+
+function openPengaduan() {
+
+    window.open(APP.FORMS.PENGADUAN, "_blank");
+
+}
+
+function checkStatus() {
+
+  const ticketNumber =
+    document.getElementById("ticketNumber").value.trim();
+
+  if (ticketNumber === "") {
+
+    alert("Masukkan Nomor Pengaduan.");
+
+    return;
+
+  }
+
+  google.script.run
+  .withSuccessHandler(showStatusResult)
+  .withFailureHandler(function(err) {
+    console.error(err);
+
+    document.getElementById("statusResult").innerHTML = `
+      <div class="alert alert-danger">
+        ${err.message}
+      </div>
+    `;
+  })
+  .checkComplaintStatus(ticketNumber);
+
+}
+
+function showStatusResult(result) {
+
+  const output =
+    document.getElementById("statusResult");
+
+  if (!result.success) {
+
+    output.innerHTML = `
+      <div class="alert alert-danger">
+        ${result.message}
+      </div>
+    `;
+
+    return;
+
+  }
+
+  output.innerHTML = `
+
+    <div class="card">
+
+      <div class="card-body">
+
+        <h5 class="mb-3">
+
+          Status Pengaduan
+
+        </h5>
+
+        <p>
+
+          <strong>Nomor :</strong><br>
+
+          ${result.nomor}
+
+        </p>
+
+        <p>
+
+          <strong>Status :</strong><br>
+
+          ${result.status}
+
+        </p>
+
+        <p>
+
+          <strong>Terakhir Diperbarui :</strong><br>
+
+          ${result.terakhir}
+
+        </p>
+
+        <p>
+
+          <strong>Catatan CS :</strong><br>
+
+          ${result.catatan || "-"}
+
+        </p>
+
+      </div>
+
+    </div>
+
+  `;
+
+}
+
+function loadDashboard(data){
+
+    document.getElementById("totalComplaint").innerHTML = data.total;
+
+    document.getElementById("waitingComplaint").innerHTML = data.waiting;
+
+    document.getElementById("receivedComplaint").innerHTML = data.received;
+
+    document.getElementById("processComplaint").innerHTML = data.process;
+
+    document.getElementById("followupComplaint").innerHTML = data.followup;
+
+    document.getElementById("finishedComplaint").innerHTML = data.finished;
+
+    document.getElementById("closedComplaint").innerHTML = data.closed;
+
+    createChart(data);
+
+    createLegend(data);
+
+}
+
+let complaintChart;
+
+function createChart(data){
+
+    const ctx =
+        document.getElementById("statusChart");
+
+    complaintChart = new Chart(ctx,{
+
+        type:"doughnut",
+
+        data:{
+
+            labels:[
+
+                "Menunggu Verifikasi",
+
+                "Diterima",
+
+                "Diproses",
+
+                "Menunggu Tindak Lanjut",
+
+                "Selesai",
+
+                "Ditutup"
+
+            ],
+
+            datasets:[{
+
+                data:[
+
+                    data.waiting,
+
+                    data.received,
+
+                    data.process,
+
+                    data.followup,
+
+                    data.finished,
+
+                    data.closed
+
+                ],
+
+                backgroundColor:[
+
+                    "#F4B400",
+
+                    "#F37021",
+
+                    "#4285F4",
+
+                    "#FB8C00",
+
+                    "#34A853",
+
+                    "#444444"
+
+                ],
+
+                borderWidth:0
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            animation:{
+
+              animateRotate:true,
+
+              animateScale:true,
+
+              duration:2000,
+
+              easing:"easeOutQuart"
+
+            },
+
+            plugins:{
+
+                legend:{
+
+                    display:false
+
+                }
+
+            }
+
+        }
+
+    });
+
+}
+
+function createLegend(data){
+
+    const total = data.total || 1;
+
+    const items = [
+
+        {
+            color:"#F4B400",
+            label:"Menunggu Verifikasi",
+            value:data.waiting
+        },
+
+        {
+            color:"#F37021",
+            label:"Diterima",
+            value:data.received
+        },
+
+        {
+            color:"#4285F4",
+            label:"Diproses",
+            value:data.process
+        },
+
+        {
+            color:"#FB8C00",
+            label:"Menunggu Tindak Lanjut",
+            value:data.followup
+        },
+
+        {
+            color:"#34A853",
+            label:"Selesai",
+            value:data.finished
+        },
+
+        {
+            color:"#444444",
+            label:"Ditutup",
+            value:data.closed
+        }
+
+    ];
+
+    let html = "";
+
+    items.forEach(item => {
+
+        const persen = Math.round((item.value / total) * 100);
+
+        html += `
+
+<div class="d-flex justify-content-between align-items-center py-2 border-bottom">
+
+    <div class="d-flex align-items-center">
+
+        <span style="
+            width:14px;
+            height:14px;
+            border-radius:50%;
+            background:${item.color};
+            margin-right:12px;">
+        </span>
+
+        ${item.label}
+
+    </div>
+
+    <strong>
+
+        ${item.value} (${persen}%)
+
+    </strong>
+
+</div>
+
+`;
+
+    });
+
+    document.getElementById("chartLegend").innerHTML = html;
+
+}
+
+</script>

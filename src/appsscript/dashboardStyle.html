@@ -1,0 +1,431 @@
+<style>
+
+body{
+
+    margin:0;
+
+    background:#F5F7FA;
+
+    font-family:Segoe UI,sans-serif;
+
+}
+
+.sidebar{
+
+    position:fixed;
+
+    left:0;
+
+    top:0;
+
+    width:270px;
+
+    height:100vh;
+
+    background:#0A2F6B;
+
+    display:flex;
+
+    flex-direction:column;
+
+    color:white;
+
+    box-shadow:4px 0 20px rgba(0,0,0,.15);
+
+}
+
+.sidebar-header{
+
+    text-align:center;
+
+    padding:35px 20px;
+
+    border-bottom:1px solid rgba(255,255,255,.12);
+
+}
+
+.sidebar-logo{
+
+    width:90px;
+
+    margin-bottom:18px;
+
+}
+
+.sidebar-header h5{
+
+    font-size:20px;
+
+    font-weight:700;
+
+    margin-bottom:6px;
+
+}
+
+.sidebar-header small{
+
+    color:#d7d7d7;
+
+}
+
+.sidebar-menu{
+
+    flex:1;
+
+    padding:25px 15px;
+
+}
+
+.sidebar-menu a{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:15px;
+
+    padding:14px 18px;
+
+    margin-bottom:10px;
+
+    border-radius:12px;
+
+    color:white;
+
+    text-decoration:none;
+
+    transition:.25s;
+
+}
+
+.sidebar-menu a:hover{
+
+    background:rgba(255,255,255,.08);
+
+    color:#F37021;
+
+}
+
+.sidebar-menu a.active{
+
+    background:#F37021;
+
+    color:white;
+
+}
+
+.sidebar-menu i{
+
+    font-size:20px;
+
+}
+
+.sidebar-footer{
+
+    padding:18px;
+
+    text-align:center;
+
+    border-top:1px solid rgba(255,255,255,.12);
+
+    color:#cfcfcf;
+
+}
+
+.main-content{
+
+    margin-left:270px;
+
+}
+
+.dashboard-header{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:#FFFFFF;
+
+    padding:22px 30px;
+
+    border-radius:18px;
+
+    box-shadow:0 8px 24px rgba(0,0,0,.08);
+
+    margin-bottom:24px;
+
+}
+
+.dashboard-header h2{
+
+    font-size:2rem;
+
+    font-weight:700;
+
+    margin-bottom:.4rem;
+
+}
+
+.dashboard-header p{
+
+    margin-bottom:0;
+
+    font-size:1rem;
+
+}
+
+.dashboard-header .text-primary{
+
+    font-weight:600;
+
+}
+
+#currentDate{
+
+    font-size:1rem;
+
+}
+
+#currentTime{
+
+    font-size:2.2rem;
+
+    font-weight:700;
+
+    line-height:1;
+
+}
+
+.stat-card{
+
+    background:#FFFFFF;
+
+    border-radius:18px;
+
+    padding:28px;
+
+    box-shadow:0 4px 18px rgba(0,0,0,.06);
+
+    transition:.25s;
+
+}
+
+.stat-card:hover{
+
+    transform:translateY(-5px);
+
+}
+
+.stat-icon{
+
+    font-size:34px;
+
+    color:#F37021;
+
+    margin-bottom:12px;
+
+}
+
+.stat-card h6{
+
+    color:#666;
+
+    margin-bottom:8px;
+
+}
+
+.stat-card h2{
+
+    font-size:38px;
+
+    font-weight:700;
+
+    color:#0A2F6B;
+
+}
+
+.stat-total{
+
+    text-align:center;
+
+    padding:45px 30px;
+
+}
+
+.stat-total .stat-icon{
+
+    font-size:48px;
+
+    margin-bottom:15px;
+
+}
+
+.stat-total h6{
+
+    font-size:22px;
+
+    font-weight:600;
+
+    margin-bottom:8px;
+
+}
+
+.stat-total h2{
+
+    font-size:68px;
+
+    font-weight:700;
+
+    color:#0A2F6B;
+
+    margin-bottom:10px;
+
+}
+
+.stat-total p{
+
+    font-size:15px;
+
+    color:#6c757d;
+
+    margin-bottom:0;
+
+}
+
+#statusChart{
+
+    max-height:320px;
+
+}
+
+.summary-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #eee;
+
+}
+
+.summary-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.summary-label{
+
+    font-weight:600;
+
+}
+
+.summary-value{
+
+    font-weight:bold;
+
+    color:#0A2F6B;
+
+}
+
+.chart-card{
+
+    height:100%;
+
+}
+
+.chart-container{
+
+    height:260px;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+}
+
+.summary-item{
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    padding:12px 0;
+
+    border-bottom:1px solid #F1F3F5;
+
+}
+
+.summary-item:last-child{
+
+    border-bottom:none;
+
+}
+
+.summary-left{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:10px;
+
+    font-weight:500;
+
+}
+
+.summary-dot{
+
+    width:12px;
+
+    height:12px;
+
+    border-radius:50%;
+
+}
+
+.summary-value{
+
+    font-weight:700;
+
+    color:#0A2F6B;
+
+}
+
+.table th{
+
+    font-weight:600;
+
+    color:#495057;
+
+}
+
+.table td{
+
+    vertical-align:middle;
+
+}
+
+.badge-status{
+
+    padding:8px 14px;
+
+    border-radius:20px;
+
+    font-size:12px;
+
+    font-weight:600;
+
+}
+
+</style>

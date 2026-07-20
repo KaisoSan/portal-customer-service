@@ -1,0 +1,402 @@
+<script>
+
+let currentComplaintNumber = "";
+
+let currentImages = {
+    ktp: "",
+    atm: "",
+    buku: "",
+    transaksi: ""
+};
+
+let complaintCache = {};
+
+function updateClock(){
+
+    const now = new Date();
+
+    const optionDate = {
+
+        weekday:"long",
+
+        day:"numeric",
+
+        month:"long",
+
+        year:"numeric"
+
+    };
+
+    document.getElementById("currentDate").innerHTML =
+        now.toLocaleDateString("id-ID", optionDate);
+
+    document.getElementById("currentTime").innerHTML =
+        now.toLocaleTimeString("id-ID");
+
+}
+
+updateClock();
+
+google.script.run
+    .withSuccessHandler(loadDashboard)
+    .getDashboardData();
+
+function loadDashboard(data){
+
+    const totalComplaint = document.getElementById("totalComplaint");
+
+    if (totalComplaint) {
+        totalComplaint.innerHTML = data.total;
+    }
+
+    document.getElementById("waitingComplaint").innerHTML =
+        data.waiting;
+
+    document.getElementById("receivedComplaint").innerHTML =
+        data.received;
+
+    document.getElementById("processComplaint").innerHTML =
+        data.process;
+
+    document.getElementById("followupComplaint").innerHTML =
+        data.followup;
+
+    document.getElementById("finishedComplaint").innerHTML =
+        data.finished;
+
+    document.getElementById("closedComplaint").innerHTML =
+        data.closed;
+
+}
+
+setInterval(updateClock,1000);
+
+function loadChart(){
+
+    google.script.run
+        .withSuccessHandler(drawChart)
+        .getChartData();
+
+}
+
+function drawChart(data){
+
+    const ctx = document.getElementById("statusChart");
+
+    new Chart(ctx,{
+
+        type:"doughnut",
+
+        data:{
+
+            labels:data.labels,
+
+            datasets:[{
+
+                data:data.values,
+
+                backgroundColor:[
+
+                    "#FFC107",
+                    "#198754",
+                    "#0D6EFD",
+                    "#F37021",
+                    "#20C997",
+                    "#212529"
+
+                ],
+
+                borderWidth:0
+
+            }]
+
+        },
+
+        options:{
+
+            responsive:true,
+
+            maintainAspectRatio:false,
+
+            plugins:{
+
+                legend:{
+                    display:false
+                }
+
+            }
+
+        }
+
+    });
+
+    loadSummary(data);
+
+}
+
+window.onload = function(){
+
+    loadChart();
+
+    loadActiveComplaints();
+
+}
+
+function loadSummary(data){
+
+    const total = data.values.reduce((a,b)=>a+b,0);
+
+    const colors = [
+
+        "#FFC107",
+        "#198754",
+        "#0D6EFD",
+        "#F37021",
+        "#20C997",
+        "#212529"
+
+    ];
+
+    let html = "";
+
+    data.labels.forEach((label,index)=>{
+
+        const value = data.values[index];
+
+        const percent = total === 0
+            ? 0
+            : Math.round(value/total*100);
+
+        html += `
+
+        <div class="summary-item">
+
+            <div class="summary-left">
+
+                <span class="summary-dot"
+                      style="background:${colors[index]}"></span>
+
+                ${label}
+
+            </div>
+
+            <div class="summary-value">
+
+                ${value} (${percent}%)
+
+            </div>
+
+        </div>
+
+        `;
+
+    });
+
+    document.getElementById("statusSummary").innerHTML = html;
+
+}
+
+function loadActiveComplaints(){
+
+    google.script.run
+        .withSuccessHandler(function(data){
+
+            renderActiveComplaints(data);
+
+        })
+        .withFailureHandler(function(err){
+
+            console.error(err);
+
+        })
+        .getActiveComplaints();
+
+}
+
+function renderActiveComplaints(data){
+
+    const tbody = document.getElementById("activeComplaintTable");
+
+    tbody.innerHTML = "";
+
+    data.forEach(function(item){
+        complaintCache[item.nomor] = item;
+        tbody.innerHTML += `
+        <tr>
+            <td>${item.nomor}</td>
+            <td>${item.nama}</td>
+            <td>${item.masalah}</td>
+            <td>
+                <span class="badge bg-primary">
+                    ${item.status}
+                </span>
+            </td>
+            <td>${item.update}</td>
+            <td>
+                <button class="btn btn-sm btn-outline-primary"
+                        onclick="openComplaint('${item.nomor}')">
+                  <i class="bi bi-eye"></i>
+                </button>
+            </td>
+        </tr>
+        `;
+
+    });
+
+    document.getElementById("activeComplaintInfo").innerHTML =
+    `${data.length} pengaduan membutuhkan tindak lanjut`;
+
+}
+
+function openComplaint(nomor){
+
+    const data = complaintCache[nomor];
+
+    if(data){
+
+        showComplaintDetail(data);
+        return;
+
+    }
+
+    google.script.run
+        .withSuccessHandler(function(data){
+
+            complaintCache[nomor] = data;
+            showComplaintDetail(data);
+
+        })
+        .getComplaintDetail(nomor);
+
+}
+
+function showComplaintDetail(data){
+
+    currentComplaintNumber = data.nomor;
+    currentImages.ktp = data.fotoKtp;
+    currentImages.atm = data.fotoAtm;
+    currentImages.buku = data.fotoBuku;
+    currentImages.transaksi = data.fotoTransaksi;
+
+    if(!data){
+        alert("Data tidak ditemukan.");
+        return;
+    }
+
+    document.getElementById("detailNomor").innerHTML = data.nomor;
+    document.getElementById("detailNama").innerHTML = data.nama;
+    document.getElementById("detailHp").innerHTML = data.hp;
+    document.getElementById("detailRekening").innerHTML = data.rekening;
+    document.getElementById("detailAtm").innerHTML = data.atm;
+    document.getElementById("detailEmail").innerHTML = data.email;
+    document.getElementById("detailTanggal").innerHTML =
+    data.tanggal + " WIB";
+    document.getElementById("detailNominal").innerHTML =
+        new Intl.NumberFormat("id-ID", {
+            style: "currency",
+            currency: "IDR"
+        }).format(data.nominal);
+    document.getElementById("detailCabang").innerHTML = data.cabang;
+    document.getElementById("detailTerminal").innerHTML = data.terminal;
+    document.getElementById("detailRecord").innerHTML = data.record;
+
+    document.getElementById("detailMasalah").value = data.masalah;
+    document.getElementById("detailCatatan").value = data.catatan || "";
+
+    document.getElementById("detailStatus").value = data.status;
+
+    const modal = new bootstrap.Modal(
+        document.getElementById("complaintDetailModal")
+    );
+
+    modal.show();
+
+}
+
+function saveComplaintStatus(){
+
+    const status = document.getElementById("detailStatus").value;
+
+    const modal = bootstrap.Modal.getInstance(
+        document.getElementById("complaintDetailModal")
+    );
+
+    // Tutup modal DULU
+    modal.hide();
+
+    google.script.run
+        .withSuccessHandler(function(success){
+
+            if(!success){
+
+                alert("Gagal memperbarui status.");
+                return;
+
+            }
+
+            // Refresh dashboard setelah modal sudah tertutup
+            google.script.run
+                .withSuccessHandler(loadDashboard)
+                .getDashboardData();
+
+            loadChart();
+            loadActiveComplaints();
+
+        })
+        .updateComplaintStatus(
+            currentComplaintNumber,
+            status
+        );
+
+}
+
+function previewImage(url){
+
+    if(!url){
+
+        alert("Dokumen belum tersedia.");
+        return;
+
+    }
+
+    const modal = new bootstrap.Modal(
+        document.getElementById("imagePreviewModal")
+    );
+
+    const img = document.getElementById("previewImage");
+    const loading = document.getElementById("loadingImage");
+
+    img.src = "";
+    img.classList.add("d-none");
+
+    loading.classList.remove("d-none");
+
+    modal.show();
+
+    // Ambil File ID dari URL Drive
+    const fileId = url.match(/[-\w]{25,}/)[0];
+
+    // URL thumbnail Drive
+    img.src =
+        "https://drive.google.com/thumbnail?id=" +
+        fileId +
+        "&sz=w2000";
+
+    img.onload = function(){
+
+        loading.classList.add("d-none");
+        img.classList.remove("d-none");
+
+    };
+
+    img.onerror = function(){
+
+        loading.classList.add("d-none");
+
+        alert("Gagal memuat dokumen.");
+
+    };
+
+}
+
+</script>
