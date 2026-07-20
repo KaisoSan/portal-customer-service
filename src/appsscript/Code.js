@@ -6,12 +6,10 @@
  * Version : 1.0.0
  * Author  : Ossama Setiarso
  */
-
 /**
  * Konfigurasi Aplikasi
  */
 const APP_CONFIG = {
-
   APP_NAME: "Portal Layanan Nasabah",
 
   BRANCH: "Customer Service",
@@ -20,55 +18,46 @@ const APP_CONFIG = {
 
   VERSION: "Build 1.3.0",
 
-  PORTAL_URL: "https://script.google.com/macros/s/AKfycbzs-NXULF06YDHVSqUC996N6CLaxQk9nlnd7tCx6jRvu3vDL_hwK3hzAIkWAWDvnLYQ/exec",
+  PORTAL_URL:
+    "https://script.google.com/macros/s/AKfycbzs-NXULF06YDHVSqUC996N6CLaxQk9nlnd7tCx6jRvu3vDL_hwK3hzAIkWAWDvnLYQ/exec",
 
   LOGO: "https://drive.google.com/thumbnail?id=1sSUvDVs4cTTuwEaZvzKDuQbIGBaRfh46&sz=w1000",
 
   COPYRIGHT: "© 2026 PT Bank Negara Indonesia (Persero) Tbk.",
 
   FORMS: {
+    SIMPLI:
+      "https://docs.google.com/forms/d/e/1FAIpQLScaHSAX2vWkX4BUl3a8VGlvUdls0j6nmrtoJDzrhFyRuAHvwA/viewform?usp=dialog",
 
-    SIMPLI: "https://docs.google.com/forms/d/e/1FAIpQLScaHSAX2vWkX4BUl3a8VGlvUdls0j6nmrtoJDzrhFyRuAHvwA/viewform?usp=dialog",
-
-    PENGADUAN: "https://docs.google.com/forms/d/e/1FAIpQLSdVUAMVTSA2eeFHbR6LaMSzo_ucXzimBeSs4IYURdgFAcZHXA/viewform?usp=dialog"
-
-  }
-
+    PENGADUAN:
+      "https://docs.google.com/forms/d/e/1FAIpQLSdVUAMVTSA2eeFHbR6LaMSzo_ucXzimBeSs4IYURdgFAcZHXA/viewform?usp=dialog",
+  },
 };
 
 const DATABASE = {
-
   PENGADUAN_SHEET_ID: "12FJl9StX9Lo6Fs5Gsc7B5ZvT9yg7NMZpwdV9lh72Xy8",
 
-  SHEET_NAME: "Form Responses 1"
-
+  SHEET_NAME: "Form Responses 1",
 };
 
 /**
  * Menampilkan halaman sesuai parameter
  */
 function doGet(e) {
-
-  const page = e && e.parameter.page
-    ? e.parameter.page
-    : "portal";
+  const page = e && e.parameter.page ? e.parameter.page : "portal";
 
   let template;
 
   switch (page) {
-
     case "dashboard":
-
       template = HtmlService.createTemplateFromFile("dashboard");
 
       break;
 
     default:
-
       template = HtmlService.createTemplateFromFile("index");
 
       break;
-
   }
 
   template.config = APP_CONFIG;
@@ -77,20 +66,17 @@ function doGet(e) {
     .evaluate()
     .setTitle(APP_CONFIG.APP_NAME)
     .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
-
 }
 
 /**
  * Memanggil file HTML lain
  */
 function include(filename) {
-
   const template = HtmlService.createTemplateFromFile(filename);
 
   template.config = APP_CONFIG;
 
   return template.evaluate().getContent();
-
 }
 
 function getConfig() {
@@ -103,19 +89,13 @@ function getConfig() {
  * ==========================================
  */
 function getDashboardData() {
+  const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
 
-  const ss = SpreadsheetApp.openById(
-    DATABASE.PENGADUAN_SHEET_ID
-  );
-
-  const sheet = ss.getSheetByName(
-    DATABASE.SHEET_NAME
-  );
+  const sheet = ss.getSheetByName(DATABASE.SHEET_NAME);
 
   const data = sheet.getDataRange().getValues();
 
   const result = {
-
     total: 0,
 
     waiting: 0,
@@ -128,78 +108,54 @@ function getDashboardData() {
 
     finished: 0,
 
-    closed: 0
-
+    closed: 0,
   };
 
   const statusMap = {
-
     "Menunggu Verifikasi": "waiting",
 
-    "Diterima": "received",
+    Diterima: "received",
 
-    "Diproses": "process",
+    Diproses: "process",
 
     "Menunggu Tindak Lanjut": "followup",
 
-    "Selesai": "finished",
+    Selesai: "finished",
 
-    "Ditutup": "closed"
-
+    Ditutup: "closed",
   };
 
   for (let i = 1; i < data.length; i++) {
-
     result.total++;
 
     const status = String(data[i][17]).trim();
 
     if (statusMap[status]) {
-
       result[statusMap[status]]++;
-
     }
-
   }
 
   return result;
-
 }
 
 function getChartData() {
-
   const data = getDashboardData();
 
   return {
-
     labels: [
-
       "Menunggu Verifikasi",
       "Diterima",
       "Diproses",
       "Menunggu Tindak Lanjut",
       "Selesai",
-      "Ditutup"
-
+      "Ditutup",
     ],
 
-    values: [
-
-      data.waiting,
-      data.received,
-      data.process,
-      data.followup,
-      data.finished,
-      data.closed
-
-    ]
-
+    values: [data.waiting, data.received, data.process, data.followup, data.finished, data.closed],
   };
-
 }
 
 function getActiveComplaints() {
-
   const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
   const sheet = ss.getSheetByName(DATABASE.SHEET_NAME);
 
@@ -208,25 +164,16 @@ function getActiveComplaints() {
   const result = [];
 
   for (let i = 1; i < data.length; i++) {
-
     const status = String(data[i][17]).trim();
 
-    if (
-      status === "Diproses" ||
-      status === "Menunggu Tindak Lanjut"
-    ) {
-
+    if (status === "Diproses" || status === "Menunggu Tindak Lanjut") {
       const masalah = String(data[i][10]);
 
       result.push({
-
         // Data tabel
         nomor: data[i][19],
         nama: data[i][1],
-        masalah:
-          masalah.length > 45
-            ? masalah.substring(0,45) + "..."
-            : masalah,
+        masalah: masalah.length > 45 ? masalah.substring(0, 45) + "..." : masalah,
         status: status,
         update: formatTanggal(data[i][18]),
 
@@ -246,18 +193,14 @@ function getActiveComplaints() {
         fotoKtp: data[i][11],
         fotoAtm: data[i][12],
         fotoBuku: data[i][13],
-        fotoTransaksi: data[i][15]
-
+        fotoTransaksi: data[i][15],
       });
-
     }
-
   }
 
-  result.sort((a,b)=>new Date(b.update)-new Date(a.update));
+  result.sort((a, b) => new Date(b.update) - new Date(a.update));
 
-  return result.slice(0,5);
-
+  return result.slice(0, 5);
 }
 
 function testActiveComplaints() {
@@ -265,19 +208,15 @@ function testActiveComplaints() {
   Logger.log(JSON.stringify(data, null, 2));
 }
 
-function getComplaintDetail(nomor){
-
+function getComplaintDetail(nomor) {
   const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
   const sheet = ss.getSheetByName(DATABASE.SHEET_NAME);
 
   const data = sheet.getDataRange().getValues();
 
-  for(let i = 1; i < data.length; i++){
-
-    if(String(data[i][19]) === String(nomor)){
-
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][19]) === String(nomor)) {
       return {
-
         nomor: data[i][19],
         nama: data[i][1],
         rekening: data[i][2],
@@ -296,30 +235,23 @@ function getComplaintDetail(nomor){
         email: data[i][16],
         status: data[i][17],
         update: String(data[i][18]),
-        catatan: data[i][20] || ""
-
+        catatan: data[i][20] || "",
       };
-
     }
-
   }
 
   return null;
-
 }
 
-function updateComplaintStatus(nomor, status){
-
+function updateComplaintStatus(nomor, status) {
   const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
   const sheet = ss.getSheetByName(DATABASE.SHEET_NAME);
 
   // Pakai helper cache
   const data = getComplaintSheetData();
 
-  for(let i = 1; i < data.length; i++){
-
-    if(String(data[i][19]) === nomor){
-
+  for (let i = 1; i < data.length; i++) {
+    if (String(data[i][19]) === nomor) {
       // Update status
       sheet.getRange(i + 1, 18).setValue(status);
 
@@ -330,57 +262,47 @@ function updateComplaintStatus(nomor, status){
       CacheService.getScriptCache().remove("COMPLAINT_DATA");
 
       return true;
-
     }
-
   }
 
   return false;
-
 }
 
-function getImageBase64(driveUrl){
+function getImageBase64(driveUrl) {
+  const start = Date.now();
 
-    const start = Date.now();
+  const id = driveUrl.match(/[-\w]{25,}/)[0];
 
-    const id = driveUrl.match(/[-\w]{25,}/)[0];
+  Logger.log("Ambil ID : " + (Date.now() - start));
 
-    Logger.log("Ambil ID : " + (Date.now()-start));
+  const file = DriveApp.getFileById(id);
 
-    const file = DriveApp.getFileById(id);
+  Logger.log("getFile : " + (Date.now() - start));
 
-    Logger.log("getFile : " + (Date.now()-start));
+  const blob = file.getBlob();
 
-    const blob = file.getBlob();
+  Logger.log("getBlob : " + (Date.now() - start));
 
-    Logger.log("getBlob : " + (Date.now()-start));
+  const result = {
+    mime: blob.getContentType(),
 
-    const result = {
+    data: Utilities.base64Encode(blob.getBytes()),
+  };
 
-        mime: blob.getContentType(),
+  Logger.log("Base64 : " + (Date.now() - start));
 
-        data: Utilities.base64Encode(blob.getBytes())
-
-    };
-
-    Logger.log("Base64 : " + (Date.now()-start));
-
-    return result;
-
+  return result;
 }
 
-function getComplaintSheetData(useCache = true){
-
+function getComplaintSheetData(useCache = true) {
   const cache = CacheService.getScriptCache();
 
-  if(useCache){
-
+  if (useCache) {
     const cached = cache.get("COMPLAINT_DATA");
 
-    if(cached){
+    if (cached) {
       return JSON.parse(cached);
     }
-
   }
 
   const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
@@ -388,24 +310,13 @@ function getComplaintSheetData(useCache = true){
 
   const data = sheet.getDataRange().getValues();
 
-  cache.put(
-    "COMPLAINT_DATA",
-    JSON.stringify(data),
-    60
-  );
+  cache.put("COMPLAINT_DATA", JSON.stringify(data), 60);
 
   return data;
-
 }
 
-function formatTanggal(date){
+function formatTanggal(date) {
+  if (!date) return "-";
 
-  if(!date) return "-";
-
-  return Utilities.formatDate(
-    new Date(date),
-    "Asia/Jakarta",
-    "dd MMM yyyy, HH:mm"
-  ) + " WIB";
-
+  return Utilities.formatDate(new Date(date), "Asia/Jakarta", "dd MMM yyyy, HH:mm") + " WIB";
 }
