@@ -1,0 +1,5 @@
+MIT License
+
+Copyright (c) 2026 Ossama Setiarso
+
+Permission is hereby granted...
