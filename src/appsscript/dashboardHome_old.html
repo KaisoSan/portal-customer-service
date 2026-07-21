@@ -1,0 +1,543 @@
+<div class="container-fluid p-4">
+  <!-- Header -->
+
+  <!-- ================= HERO ================= -->
+
+  <div class="hero-card">
+    <div class="hero-skyline"><?!= include("skyline") ?></div>
+    <div class="hero-left">
+      <div class="hero-badge">
+        <i class="bi bi-sun-fill"></i>
+        Selamat Datang
+      </div>
+
+      <h1 class="hero-title">Halo, Ossama 👋</h1>
+
+      <p class="hero-subtitle">Selamat bekerja dan semoga harimu produktif.</p>
+
+      <div class="hero-branch">
+        <i class="bi bi-bank2"></i>
+
+        <div>
+          <strong>BNI KC Situbondo</strong>
+
+          <div class="hero-role">Customer Service</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-right">
+      <div class="hero-panel">
+        <div class="hero-label">
+          <i class="bi bi-calendar-event"></i>
+
+          <span id="currentDate"></span>
+        </div>
+
+        <div class="hero-clock">
+          <span id="currentTime"></span>
+        </div>
+
+        <hr />
+
+        <div class="system-status">
+          <span class="status-dot"></span>
+
+          <div>
+            <strong>Sistem Online</strong>
+
+            <small> Semua layanan berjalan normal </small>
+          </div>
+        </div>
+
+        <hr />
+
+        <div class="last-sync">
+          <i class="bi bi-arrow-repeat"></i>
+
+          <div>
+            <strong>Sinkronisasi Terakhir</strong>
+
+            <small id="lastSync"> -- </small>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= KPI ================= -->
+  <div class="row g-4 mt-4">
+    <!-- Menunggu Verifikasi -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon warning">
+            <i class="bi bi-hourglass-split"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Menunggu Verifikasi</h6>
+          <h2 id="waitingComplaint">0</h2>
+          <small>Perlu diverifikasi</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Diterima -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon" style="background: #ecfdf5; color: #16a34a">
+            <i class="bi bi-check-circle-fill"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Diterima</h6>
+          <h2 id="receivedComplaint">0</h2>
+          <small>Sudah diterima</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Diproses -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon" style="background: #eff6ff; color: #2563eb">
+            <i class="bi bi-gear-fill"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Diproses</h6>
+          <h2 id="processComplaint">0</h2>
+          <small>Sedang diproses</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Menunggu Tindak Lanjut -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon" style="background: #fef3c7; color: #d97706">
+            <i class="bi bi-arrow-repeat"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Menunggu TL</h6>
+          <h2 id="followupComplaint">0</h2>
+          <small>Menunggu tindak lanjut</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Selesai -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon" style="background: #dcfce7; color: #15803d">
+            <i class="bi bi-clipboard-check-fill"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Selesai</h6>
+          <h2 id="finishedComplaint">0</h2>
+          <small>Pengaduan selesai</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+
+    <!-- Ditutup -->
+    <div class="col-xl-2 col-lg-4 col-md-6">
+      <div class="premium-card">
+        <div class="premium-top">
+          <div class="premium-icon" style="background: #f3f4f6; color: #374151">
+            <i class="bi bi-lock-fill"></i>
+          </div>
+          <span class="premium-live">LIVE</span>
+        </div>
+
+        <div class="premium-body">
+          <h6>Ditutup</h6>
+          <h2 id="closedComplaint">0</h2>
+          <small>Kasus ditutup</small>
+        </div>
+
+        <div class="premium-footer">
+          <i class="bi bi-arrow-repeat"></i>
+          Update Live
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row mt-4">
+
+    <!-- Donut Chart -->
+    <div class="col-lg-6">
+
+        <div class="stat-card chart-card premium-chart">
+
+            <div class="chart-header">
+
+                <div>
+
+                    <h5>
+                        <i class="bi bi-pie-chart-fill text-warning"></i>
+                        Distribusi Pengaduan
+                    </h5>
+
+                    <small>Status pengaduan secara real-time</small>
+
+                </div>
+
+                <span class="premium-live">LIVE</span>
+
+            </div>
+
+            <div class="chart-container">
+
+                <canvas id="statusChart"></canvas>
+
+            </div>
+
+            <div id="chartLegend" class="chart-legend"></div>
+
+        </div>
+
+    </div>
+
+    <!-- Ringkasan -->
+    <div class="col-lg-6">
+
+        <div class="stat-card chart-card premium-chart">
+
+            <div class="chart-header">
+
+                <div>
+
+                    <h5>
+
+                        <i class="bi bi-bar-chart-fill text-primary"></i>
+
+                        Ringkasan Statistik
+
+                    </h5>
+
+                    <small>Distribusi status pengaduan</small>
+
+                </div>
+
+                <span class="premium-live">LIVE</span>
+
+            </div>
+
+            <div id="statusSummary" class="summary-modern"></div>
+
+        </div>
+
+    </div>
+
+</div>
+
+        <div class="row mt-4">
+          <div class="col-12">
+            <div class="stat-card">
+              <div class="d-flex justify-content-between align-items-center mb-3">
+                <div>
+                  <h5 class="mb-1">
+                    <i class="bi bi-list-check text-primary"></i>
+                    Pengaduan yang Perlu Ditindaklanjuti
+                  </h5>
+
+                  <small class="text-muted" id="activeComplaintInfo"> Memuat data... </small>
+                </div>
+              </div>
+
+              <div class="table-responsive">
+                <table class="table align-middle">
+                  <thead>
+                    <tr>
+                      <th>No. Pengaduan</th>
+
+                      <th>Nasabah</th>
+
+                      <th>Permasalahan</th>
+
+                      <th>Status</th>
+
+                      <th>Update</th>
+
+                      <th>Aksi</th>
+                    </tr>
+                  </thead>
+
+                  <tbody id="activeComplaintTable">
+                    <tr>
+                      <td colspan="6" class="text-center text-muted py-4">Memuat data...</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Detail Pengaduan -->
+        <div class="modal fade" id="complaintDetailModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content">
+              <!-- Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Detail Pengaduan</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <!-- Body -->
+              <div class="modal-body">
+                <!-- Data Nasabah -->
+                <h6 class="fw-bold text-primary mb-3">
+                  <i class="bi bi-person-fill"></i>
+                  Data Nasabah
+                </h6>
+
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <b>Nama Nasabah</b><br />
+                    <span id="detailNama">-</span>
+                  </div>
+
+                  <div class="col-md-6">
+                    <b>No HP</b><br />
+                    <span id="detailHp">-</span>
+                  </div>
+
+                  <div class="col-md-6 mt-3">
+                    <b>Nomor Rekening</b><br />
+                    <span id="detailRekening">-</span>
+                  </div>
+
+                  <div class="col-md-6 mt-3">
+                    <b>Nomor Kartu ATM</b><br />
+                    <span id="detailAtm">-</span>
+                  </div>
+
+                  <div class="col-md-12 mt-3">
+                    <b>Email</b><br />
+                    <span id="detailEmail">-</span>
+                  </div>
+                </div>
+
+                <hr />
+
+                <!-- Data Transaksi -->
+                <h6 class="fw-bold text-success mb-3">
+                  <i class="bi bi-bank"></i>
+                  Data Transaksi
+                </h6>
+
+                <div class="row mb-4">
+                  <div class="col-md-6">
+                    <b>Tanggal Transaksi</b><br />
+                    <span id="detailTanggal">-</span>
+                  </div>
+
+                  <div class="col-md-6">
+                    <b>Nominal Transaksi</b><br />
+                    <span id="detailNominal">-</span>
+                  </div>
+
+                  <div class="col-md-6 mt-3">
+                    <b>Kantor Cabang</b><br />
+                    <span id="detailCabang">-</span>
+                  </div>
+
+                  <div class="col-md-6 mt-3">
+                    <b>Terminal ATM/CDM</b><br />
+                    <span id="detailTerminal">-</span>
+                  </div>
+
+                  <div class="col-md-12 mt-3">
+                    <b>No Record Trx</b><br />
+                    <span id="detailRecord">-</span>
+                  </div>
+                </div>
+
+                <hr />
+
+                <!-- Detail Pengaduan -->
+                <h6 class="fw-bold text-warning mb-3">
+                  <i class="bi bi-file-earmark-text-fill"></i>
+                  Detail Pengaduan
+                </h6>
+
+                <div class="row">
+                  <div class="col-md-6">
+                    <b>Nomor Pengaduan</b><br />
+                    <span id="detailNomor">-</span>
+                  </div>
+
+                  <div class="col-md-6">
+                    <label class="form-label fw-bold"> Status </label>
+
+                    <select id="detailStatus" class="form-select">
+                      <option>Menunggu Verifikasi</option>
+                      <option>Diterima</option>
+                      <option>Diproses</option>
+                      <option>Menunggu Tindak Lanjut</option>
+                      <option>Selesai</option>
+                      <option>Ditutup</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="mt-4">
+                  <label class="form-label fw-bold"> Permasalahan </label>
+
+                  <textarea id="detailMasalah" class="form-control" rows="4" readonly></textarea>
+                </div>
+
+                <div class="mt-4">
+                  <label class="form-label fw-bold"> Catatan Customer Service </label>
+
+                  <textarea
+                    id="detailCatatan"
+                    class="form-control"
+                    rows="4"
+                    placeholder="Tuliskan catatan Customer Service..."
+                  ></textarea>
+                </div>
+
+                <hr />
+
+                <h6 class="fw-bold text-info mb-3">
+                  <i class="bi bi-paperclip"></i>
+                  Dokumen Pendukung
+                </h6>
+
+                <div class="list-group">
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-person-vcard"></i> Foto KTP</span>
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      onclick="previewImage(currentImages.ktp)"
+                    >
+                      Lihat
+                    </button>
+                  </div>
+
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-credit-card"></i> Foto Kartu ATM</span>
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      onclick="previewImage(currentImages.atm)"
+                    >
+                      Lihat
+                    </button>
+                  </div>
+
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-book"></i> Buku Tabungan</span>
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      onclick="previewImage(currentImages.buku)"
+                    >
+                      Lihat
+                    </button>
+                  </div>
+
+                  <div class="list-group-item d-flex justify-content-between align-items-center">
+                    <span><i class="bi bi-receipt"></i> Bukti Transaksi</span>
+                    <button
+                      class="btn btn-sm btn-outline-primary"
+                      onclick="previewImage(currentImages.transaksi)"
+                    >
+                      Lihat
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Footer -->
+              <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+
+                <button class="btn btn-primary" onclick="saveComplaintStatus()">Simpan</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Modal Preview Dokumen -->
+        <div class="modal fade" id="imagePreviewModal" tabindex="-1" aria-hidden="true">
+          <div class="modal-dialog modal-xl modal-dialog-centered">
+            <div class="modal-content">
+              <!-- Header -->
+              <div class="modal-header">
+                <h5 class="modal-title">Preview Dokumen</h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+              </div>
+
+              <!-- Body -->
+              <div class="modal-body text-center">
+                <!-- Loading -->
+                <div id="loadingImage">
+                  <div class="spinner-border text-primary" role="status"></div>
+
+                  <h6 class="mt-3 mb-1">Memuat Dokumen</h6>
+
+                  <small class="text-muted"> Mohon tunggu sebentar... </small>
+                </div>
+
+                <!-- Preview -->
+                <img
+                  id="previewImage"
+                  src=""
+                  class="img-fluid rounded shadow-lg d-none"
+                  style="max-height: 75vh"
+                />
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
