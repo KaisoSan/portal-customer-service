@@ -166,41 +166,39 @@ function getActiveComplaints() {
   for (let i = 1; i < data.length; i++) {
     const status = String(data[i][17]).trim();
 
-    if (status === "Diproses" || status === "Menunggu Tindak Lanjut") {
-      const masalah = String(data[i][10]);
+    const masalah = String(data[i][10]);
 
-      result.push({
-        // Data tabel
-        nomor: data[i][19],
-        nama: data[i][1],
-        masalah: masalah.length > 45 ? masalah.substring(0, 45) + "..." : masalah,
-        status: status,
-        update: formatTanggal(data[i][18]),
+    result.push({
+      // Data tabel
+      nomor: data[i][19],
+      nama: data[i][1],
+      masalah: masalah.length > 45 ? masalah.substring(0, 45) + "..." : masalah,
+      status: status,
+      update: formatTanggal(data[i][18]),
 
-        // Data detail
-        rekening: data[i][2],
-        atm: data[i][3],
-        cabang: data[i][4],
-        tanggal: formatTanggal(data[i][5]),
-        nominal: data[i][6],
-        terminal: data[i][7],
-        record: data[i][8],
-        hp: data[i][9],
-        email: data[i][16],
-        catatan: data[i][20] || "",
+      // Data detail
+      rekening: data[i][2],
+      atm: data[i][3],
+      cabang: data[i][4],
+      tanggal: formatTanggal(data[i][5]),
+      nominal: data[i][6],
+      terminal: data[i][7],
+      record: data[i][8],
+      hp: data[i][9],
+      email: data[i][16],
+      catatan: data[i][20] || "",
 
-        // Link dokumen
-        fotoKtp: data[i][11],
-        fotoAtm: data[i][12],
-        fotoBuku: data[i][13],
-        fotoTransaksi: data[i][15],
-      });
-    }
+      // Link dokumen
+      fotoKtp: data[i][11],
+      fotoAtm: data[i][12],
+      fotoBuku: data[i][13],
+      fotoTransaksi: data[i][15],
+    });
   }
 
   result.sort((a, b) => new Date(b.update) - new Date(a.update));
 
-  return result.slice(0, 5);
+  return result;
 }
 
 function testActiveComplaints() {

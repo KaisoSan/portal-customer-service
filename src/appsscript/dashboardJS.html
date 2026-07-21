@@ -9,6 +9,10 @@
   };
 
   let complaintCache = {};
+  let activeComplaintData = [];
+  let filteredComplaintData = [];
+  let currentPage = 1;
+  const rowsPerPage = 5;
 
   function updateClock() {
     const now = new Date();
@@ -151,35 +155,14 @@
   }
 
   function renderActiveComplaints(data) {
-    const tbody = document.getElementById("activeComplaintTable");
+    activeComplaintData = [...data];
 
-    tbody.innerHTML = "";
+    currentPage = 1;
 
-    data.forEach(function (item) {
-      complaintCache[item.nomor] = item;
-      tbody.innerHTML += `
-        <tr>
-            <td>${item.nomor}</td>
-            <td>${item.nama}</td>
-            <td>${item.masalah}</td>
-            <td>
-                <span class="badge bg-primary">
-                    ${item.status}
-                </span>
-            </td>
-            <td>${item.update}</td>
-            <td>
-                <button class="btn btn-sm btn-outline-primary"
-                        onclick="openComplaint('${item.nomor}')">
-                  <i class="bi bi-eye"></i>
-                </button>
-            </td>
-        </tr>
-        `;
-    });
+    updateComplaintTable();
 
     document.getElementById("activeComplaintInfo").innerHTML =
-      `${data.length} pengaduan membutuhkan tindak lanjut`;
+      `Menampilkan ${data.length} pengaduan`;
   }
 
   function openComplaint(nomor) {
@@ -293,5 +276,174 @@
 
       alert("Gagal memuat dokumen.");
     };
+  }
+
+  function renderComplaintRows(data) {
+    const tbody = document.getElementById("activeComplaintTable");
+
+    tbody.innerHTML = "";
+
+    data.forEach(function (item) {
+      complaintCache[item.nomor] = item;
+
+      tbody.innerHTML += `
+      <tr>
+        <td>${item.nomor}</td>
+        <td>${item.nama}</td>
+        <td>${item.masalah}</td>
+        <td>
+          <span class="badge bg-primary">
+            ${item.status}
+          </span>
+        </td>
+        <td>${item.update}</td>
+        <td>
+          <button class="btn btn-sm btn-outline-primary"
+                  onclick="openComplaint('${item.nomor}')">
+            <i class="bi bi-eye"></i>
+          </button>
+        </td>
+      </tr>
+    `;
+    });
+  }
+  console.log(activeComplaintData.map((x) => x.status));
+  function filterActiveComplaints() {
+    const keyword = document.getElementById("complaintSearch").value.toLowerCase().trim();
+
+    const status = document.getElementById("complaintStatusFilter").value.toLowerCase();
+
+    const filtered = activeComplaintData.filter(function (item) {
+      const matchKeyword =
+        keyword === "" ||
+        item.nomor.toLowerCase().includes(keyword) ||
+        item.nama.toLowerCase().includes(keyword) ||
+        item.masalah.toLowerCase().includes(keyword) ||
+        item.status.toLowerCase().includes(keyword);
+
+      const matchStatus = status === "" || item.status.toLowerCase() === status;
+
+      return matchKeyword && matchStatus;
+    });
+
+    renderComplaintRows(filtered);
+
+    document.getElementById("complaintCounter").innerHTML =
+      `Menampilkan ${filtered.length} dari ${activeComplaintData.length} pengaduan`;
+  }
+  function renderCurrentPage() {
+    const start = (currentPage - 1) * rowsPerPage;
+    const end = start + rowsPerPage;
+
+    const pageData = filteredComplaintData.slice(start, end);
+
+    renderComplaintRows(pageData);
+  }
+  function updateCounter() {
+    const total = filteredComplaintData.length;
+
+    if (total === 0) {
+      document.getElementById("complaintCounter").innerHTML = "Menampilkan 0 dari 0 pengaduan";
+
+      return;
+    }
+
+    const start = (currentPage - 1) * rowsPerPage + 1;
+
+    const end = Math.min(currentPage * rowsPerPage, total);
+
+    document.getElementById("complaintCounter").innerHTML =
+      `Menampilkan ${start}–${end} dari ${total} pengaduan`;
+  }
+  function updateComplaintTable() {
+    // Ambil keyword
+    const keyword = document.getElementById("complaintSearch").value.toLowerCase().trim();
+
+    // Ambil status
+    const status = document.getElementById("complaintStatusFilter").value.toLowerCase();
+
+    // Filter data
+    filteredComplaintData = activeComplaintData.filter(function (item) {
+      const matchKeyword =
+        keyword === "" ||
+        item.nomor.toLowerCase().includes(keyword) ||
+        item.nama.toLowerCase().includes(keyword) ||
+        item.masalah.toLowerCase().includes(keyword) ||
+        item.status.toLowerCase().includes(keyword);
+
+      const matchStatus = status === "" || item.status.toLowerCase() === status;
+
+      return matchKeyword && matchStatus;
+    });
+
+    renderCurrentPage();
+    updateCounter();
+    renderPagination();
+  }
+  function renderPagination() {
+    const container = document.getElementById("paginationContainer");
+
+    const totalPages = Math.ceil(filteredComplaintData.length / rowsPerPage);
+
+    if (totalPages <= 1) {
+      container.innerHTML = "";
+      return;
+    }
+
+    let html = `
+    <nav>
+      <ul class="pagination pagination-sm mb-0">
+  `;
+
+    html += `
+    <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(-1); return false;">
+        &laquo;
+      </a>
+    </li>
+  `;
+
+    for (let i = 1; i <= totalPages; i++) {
+      html += `
+      <li class="page-item ${currentPage === i ? "active" : ""}">
+        <a class="page-link"
+           href="#"
+           onclick="goToPage(${i}); return false;">
+          ${i}
+        </a>
+      </li>
+    `;
+    }
+
+    html += `
+    <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+      <a class="page-link" href="#" onclick="changePage(1); return false;">
+        &raquo;
+      </a>
+    </li>
+  `;
+
+    html += `
+      </ul>
+    </nav>
+  `;
+
+    container.innerHTML = html;
+  }
+  function goToPage(page) {
+    currentPage = page;
+
+    updateComplaintTable();
+  }
+  function changePage(step) {
+    const totalPages = Math.ceil(filteredComplaintData.length / rowsPerPage);
+
+    currentPage += step;
+
+    if (currentPage < 1) currentPage = 1;
+
+    if (currentPage > totalPages) currentPage = totalPages;
+
+    updateComplaintTable();
   }
 </script>

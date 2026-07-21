@@ -268,13 +268,55 @@
           <div>
             <h5 class="mb-1">
               <i class="bi bi-list-check text-primary"></i>
-              Pengaduan yang Perlu Ditindaklanjuti
+              Daftar Pengaduan Nasabah
             </h5>
 
             <small id="activeComplaintInfo" class="text-muted"> Memuat data... </small>
           </div>
         </div>
+        <div class="row g-3 align-items-center mb-3">
+          <div class="col-lg-8">
+            <div class="input-group">
+              <span class="input-group-text">
+                <i class="bi bi-search"></i>
+              </span>
 
+              <input
+                type="text"
+                id="complaintSearch"
+                class="form-control"
+                placeholder="Cari nomor, nama, rekening, HP, status, atau permasalahan..."
+                oninput="
+                  currentPage = 1;
+                  updateComplaintTable();
+                "
+              />
+            </div>
+          </div>
+
+          <div class="col-lg-4">
+            <select
+              id="complaintStatusFilter"
+              class="form-select"
+              onchange="
+                currentPage = 1;
+                updateComplaintTable();
+              "
+            >
+              <option value="">Semua Status</option>
+              <option value="Menunggu Verifikasi">Menunggu Verifikasi</option>
+              <option value="Diterima">Diterima</option>
+              <option value="Diproses">Diproses</option>
+              <option value="Menunggu Tindak Lanjut">Menunggu Tindak Lanjut</option>
+              <option value="Selesai">Selesai</option>
+              <option value="Ditutup">Ditutup</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="complaintCounter" class="small text-muted mb-3">
+          Menampilkan 0 dari 0 pengaduan
+        </div>
         <div class="table-responsive">
           <table class="table align-middle">
             <thead>
@@ -295,6 +337,7 @@
             </tbody>
           </table>
         </div>
+        <div id="paginationContainer" class="d-flex justify-content-end mt-3"></div>
       </div>
     </div>
   </div>
