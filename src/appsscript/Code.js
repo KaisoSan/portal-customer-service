@@ -51,12 +51,14 @@ function doGet(e) {
   switch (page) {
     case "dashboard":
       template = HtmlService.createTemplateFromFile("dashboard");
+      break;
 
+    case "pengaduan":
+      template = HtmlService.createTemplateFromFile("pengaduan");
       break;
 
     default:
       template = HtmlService.createTemplateFromFile("index");
-
       break;
   }
 
@@ -71,6 +73,7 @@ function doGet(e) {
 /**
  * Memanggil file HTML lain
  */
+/*tes*/
 function include(filename) {
   const template = HtmlService.createTemplateFromFile(filename);
 

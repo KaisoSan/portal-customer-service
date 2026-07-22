@@ -100,8 +100,8 @@
 
   window.onload = function () {
     loadChart();
-
     loadActiveComplaints();
+    initializeNavigation();
   };
 
   function loadSummary(data) {
@@ -292,20 +292,25 @@
         <td>${item.nama}</td>
         <td>${item.masalah}</td>
         <td>
-          <span class="badge bg-primary">
+          <span class="badge ${getStatusBadgeClass(item.status)}">
             ${item.status}
           </span>
         </td>
         <td>${item.update}</td>
         <td>
-          <button class="btn btn-sm btn-outline-primary"
-                  onclick="openComplaint('${item.nomor}')">
+          <button
+    class="btn btn-sm btn-outline-primary btn-action"
+    onclick="openComplaint('${item.nomor}')"
+    data-bs-toggle="tooltip"
+    data-bs-placement="top"
+    title="Lihat Detail">
             <i class="bi bi-eye"></i>
           </button>
         </td>
       </tr>
     `;
     });
+    initializeTooltips();
   }
   console.log(activeComplaintData.map((x) => x.status));
   function filterActiveComplaints() {
@@ -379,6 +384,7 @@
     renderCurrentPage();
     updateCounter();
     renderPagination();
+    toggleEmptyState();
   }
   function renderPagination() {
     const container = document.getElementById("paginationContainer");
@@ -398,7 +404,7 @@
     html += `
     <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
       <a class="page-link" href="#" onclick="changePage(-1); return false;">
-        &laquo;
+        <i class="bi bi-chevron-left"></i>
       </a>
     </li>
   `;
@@ -418,7 +424,7 @@
     html += `
     <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
       <a class="page-link" href="#" onclick="changePage(1); return false;">
-        &raquo;
+        <i class="bi bi-chevron-right"></i>
       </a>
     </li>
   `;
@@ -445,5 +451,108 @@
     if (currentPage > totalPages) currentPage = totalPages;
 
     updateComplaintTable();
+  }
+  function getStatusBadgeClass(status) {
+    switch (status) {
+      case "Menunggu Verifikasi":
+        return "bg-warning text-dark";
+
+      case "Diterima":
+        return "bg-primary";
+
+      case "Diproses":
+        return "bg-orange";
+
+      case "Menunggu Tindak Lanjut":
+        return "bg-purple";
+
+      case "Selesai":
+        return "bg-success";
+
+      case "Ditutup":
+        return "bg-dark";
+
+      default:
+        return "bg-secondary";
+    }
+  }
+  function toggleEmptyState() {
+    const table = document.querySelector(".table-responsive");
+    const empty = document.getElementById("emptyState");
+
+    if (filteredComplaintData.length === 0) {
+      table.classList.add("d-none");
+      empty.classList.remove("d-none");
+    } else {
+      table.classList.remove("d-none");
+      empty.classList.add("d-none");
+    }
+  }
+  function resetComplaintFilter() {
+    document.getElementById("complaintSearch").value = "";
+
+    document.getElementById("complaintStatusFilter").value = "";
+
+    currentPage = 1;
+
+    updateComplaintTable();
+  }
+  function initializeTooltips() {
+    const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
+
+    tooltipTriggerList.forEach(function (el) {
+      const existing = bootstrap.Tooltip.getInstance(el);
+
+      if (existing) {
+        existing.dispose();
+      }
+
+      new bootstrap.Tooltip(el);
+    });
+  }
+
+  /**
+   * Inisialisasi navigasi sidebar
+   */
+  function initializeNavigation() {
+    const links = document.querySelectorAll(".sidebar-link");
+
+    links.forEach(function (link) {
+      link.addEventListener("click", function (event) {
+        event.preventDefault();
+
+        showPage(this.dataset.page);
+      });
+    });
+  }
+
+  /**
+   * Menampilkan halaman portal
+   * @param {string} page - Nama halaman yang akan ditampilkan
+   */
+  function showPage(page) {
+    // Sembunyikan semua halaman
+    document.querySelectorAll('[id^="page-"]').forEach(function (element) {
+      element.classList.add("d-none");
+    });
+
+    // Tampilkan halaman yang dipilih
+    const target = document.getElementById(`page-${page}`);
+
+    if (target) {
+      target.classList.remove("d-none");
+    }
+
+    // Hapus active dari semua menu
+    document.querySelectorAll(".sidebar-link").forEach(function (link) {
+      link.classList.remove("active");
+    });
+
+    // Tambahkan active ke menu yang dipilih
+    const activeLink = document.querySelector(`.sidebar-link[data-page="${page}"]`);
+
+    if (activeLink) {
+      activeLink.classList.add("active");
+    }
   }
 </script>

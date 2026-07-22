@@ -1,74 +1,45 @@
 <div class="sidebar">
+  <div class="sidebar-header">
+    <img src="<?= config.LOGO ?>" class="sidebar-logo" alt="BNI Logo" />
 
-    <div class="sidebar-header">
+    <h5>Portal Customer Service</h5>
 
-        <img
-            src="<?= config.LOGO ?>"
-            class="sidebar-logo"
-            alt="BNI Logo">
+    <small> <?= config.OFFICE ?> </small>
+  </div>
 
-        <h5>
-            Portal Customer Service
-        </h5>
+  <div class="sidebar-menu">
+    <a href="#" class="sidebar-link active" data-page="dashboard">
+      <i class="bi bi-grid-fill"></i>
 
-        <small>
-            <?= config.OFFICE ?>
-        </small>
+      <span>Dashboard</span>
+    </a>
 
-    </div>
+    <a href="#" class="sidebar-link" data-page="pengaduan">
+      <i class="bi bi-chat-left-text-fill"></i>
 
-    <div class="sidebar-menu">
+      <span>Pengaduan</span>
+    </a>
 
-        <a href="#" class="active">
+    <a href="#">
+      <i class="bi bi-bar-chart-fill"></i>
 
-            <i class="bi bi-grid-fill"></i>
+      <span>Statistik</span>
+    </a>
 
-            <span>Dashboard</span>
+    <a href="#">
+      <i class="bi bi-file-earmark-text-fill"></i>
 
-        </a>
+      <span>Laporan</span>
+    </a>
 
-        <a href="#">
+    <a href="#">
+      <i class="bi bi-gear-fill"></i>
 
-            <i class="bi bi-chat-left-text-fill"></i>
+      <span>Pengaturan</span>
+    </a>
+  </div>
 
-            <span>Pengaduan</span>
-
-        </a>
-
-        <a href="#">
-
-            <i class="bi bi-bar-chart-fill"></i>
-
-            <span>Statistik</span>
-
-        </a>
-
-        <a href="#">
-
-            <i class="bi bi-file-earmark-text-fill"></i>
-
-            <span>Laporan</span>
-
-        </a>
-
-        <a href="#">
-
-            <i class="bi bi-gear-fill"></i>
-
-            <span>Pengaturan</span>
-
-        </a>
-
-    </div>
-
-    <div class="sidebar-footer">
-
-        <small>
-
-            <?= config.VERSION ?>
-
-        </small>
-
-    </div>
-
+  <div class="sidebar-footer">
+    <small> <?= config.VERSION ?> </small>
+  </div>
 </div>
