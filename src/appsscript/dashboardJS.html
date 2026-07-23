@@ -12,6 +12,7 @@
   let activeComplaintData = [];
   let filteredComplaintData = [];
   let currentPage = 1;
+  let trendChartInstance = null;
   const rowsPerPage = 5;
 
   function updateClock() {
@@ -58,15 +59,63 @@
 
   setInterval(updateClock, 1000);
 
-  function loadChart() {
-    google.script.run.withSuccessHandler(drawChart).getChartData();
+  function loadTrendChart() {
+    google.script.run.withSuccessHandler(drawTrendChart).getTrendChartData();
   }
 
-  function drawChart(data) {
-    const ctx = document.getElementById("statusChart");
+  function loadStatusSummary() {
+    google.script.run.withSuccessHandler(drawStatusSummary).getChartData();
+  }
 
-    new Chart(ctx, {
-      type: "doughnut",
+  function drawStatusSummary(data) {
+    const total = data.values.reduce((a, b) => a + b, 0);
+
+    const colors = ["#FFC107", "#198754", "#0D6EFD", "#F37021", "#20C997", "#212529"];
+
+    let html = "";
+
+    data.labels.forEach((label, index) => {
+      const value = data.values[index];
+
+      const percent = total === 0 ? 0 : Math.round((value / total) * 100);
+
+      html += `
+      <div class="summary-item">
+        <div class="summary-left">
+          <span class="summary-dot"
+                style="background:${colors[index]}"></span>
+
+          <span>${label}</span>
+        </div>
+
+        <strong>${value} (${percent}%)</strong>
+      </div>
+    `;
+    });
+
+    document.getElementById("statusSummary").innerHTML = html;
+  }
+
+  function drawTrendChart(data) {
+    console.log("drawChart dipanggil");
+    console.log(data);
+    const canvas = document.getElementById("trendChart");
+    const ctx = canvas.getContext("2d");
+
+    // kalau chart lama ada
+    if (trendChartInstance) {
+      trendChartInstance.destroy();
+    }
+
+    // gradient
+    const gradient = ctx.createLinearGradient(0, 0, 0, 280);
+
+    gradient.addColorStop(0, "rgba(243,112,33,.35)");
+    gradient.addColorStop(0.6, "rgba(243,112,33,.10)");
+    gradient.addColorStop(1, "rgba(243,112,33,0)");
+
+    trendChartInstance = new Chart(ctx, {
+      type: "line",
 
       data: {
         labels: data.labels,
@@ -75,9 +124,23 @@
           {
             data: data.values,
 
-            backgroundColor: ["#FFC107", "#198754", "#0D6EFD", "#F37021", "#20C997", "#212529"],
+            borderColor: "#F37021",
 
-            borderWidth: 0,
+            backgroundColor: gradient,
+
+            fill: true,
+
+            tension: 0.45,
+
+            pointRadius: 5,
+
+            pointHoverRadius: 7,
+
+            pointBackgroundColor: "#fff",
+
+            pointBorderColor: "#F37021",
+
+            pointBorderWidth: 3,
           },
         ],
       },
@@ -92,18 +155,37 @@
             display: false,
           },
         },
+
+        scales: {
+          x: {
+            grid: {
+              display: false,
+            },
+
+            border: {
+              display: false,
+            },
+          },
+
+          y: {
+            beginAtZero: true,
+
+            ticks: {
+              stepSize: 5,
+            },
+
+            border: {
+              display: false,
+            },
+
+            grid: {
+              color: "#f1f5f9",
+            },
+          },
+        },
       },
     });
-
-    loadSummary(data);
   }
-
-  window.onload = function () {
-    loadChart();
-    loadActiveComplaints();
-    initializeNavigation();
-  };
-
   function loadSummary(data) {
     const total = data.values.reduce((a, b) => a + b, 0);
 
@@ -118,26 +200,26 @@
 
       html += `
 
-        <div class="summary-item">
+          <div class="summary-item">
 
-            <div class="summary-left">
+              <div class="summary-left">
 
-                <span class="summary-dot"
-                      style="background:${colors[index]}"></span>
+                  <span class="summary-dot"
+                        style="background:${colors[index]}"></span>
 
-                ${label}
+                  ${label}
 
-            </div>
+              </div>
 
-            <div class="summary-value">
+              <div class="summary-value">
 
-                ${value} (${percent}%)
+                  ${value} (${percent}%)
 
-            </div>
+              </div>
 
-        </div>
+          </div>
 
-        `;
+          `;
     });
 
     document.getElementById("statusSummary").innerHTML = html;
@@ -287,28 +369,28 @@
       complaintCache[item.nomor] = item;
 
       tbody.innerHTML += `
-      <tr>
-        <td>${item.nomor}</td>
-        <td>${item.nama}</td>
-        <td>${item.masalah}</td>
-        <td>
-          <span class="badge ${getStatusBadgeClass(item.status)}">
-            ${item.status}
-          </span>
-        </td>
-        <td>${item.update}</td>
-        <td>
-          <button
-    class="btn btn-sm btn-outline-primary btn-action"
-    onclick="openComplaint('${item.nomor}')"
-    data-bs-toggle="tooltip"
-    data-bs-placement="top"
-    title="Lihat Detail">
-            <i class="bi bi-eye"></i>
-          </button>
-        </td>
-      </tr>
-    `;
+        <tr>
+          <td>${item.nomor}</td>
+          <td>${item.nama}</td>
+          <td>${item.masalah}</td>
+          <td>
+            <span class="badge ${getStatusBadgeClass(item.status)}">
+              ${item.status}
+            </span>
+          </td>
+          <td>${item.update}</td>
+          <td>
+            <button
+      class="btn btn-sm btn-outline-primary btn-action"
+      onclick="openComplaint('${item.nomor}')"
+      data-bs-toggle="tooltip"
+      data-bs-placement="top"
+      title="Lihat Detail">
+              <i class="bi bi-eye"></i>
+            </button>
+          </td>
+        </tr>
+      `;
     });
     initializeTooltips();
   }
@@ -397,42 +479,42 @@
     }
 
     let html = `
-    <nav>
-      <ul class="pagination pagination-sm mb-0">
-  `;
+      <nav>
+        <ul class="pagination pagination-sm mb-0">
+    `;
 
     html += `
-    <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
-      <a class="page-link" href="#" onclick="changePage(-1); return false;">
-        <i class="bi bi-chevron-left"></i>
-      </a>
-    </li>
-  `;
-
-    for (let i = 1; i <= totalPages; i++) {
-      html += `
-      <li class="page-item ${currentPage === i ? "active" : ""}">
-        <a class="page-link"
-           href="#"
-           onclick="goToPage(${i}); return false;">
-          ${i}
+      <li class="page-item ${currentPage === 1 ? "disabled" : ""}">
+        <a class="page-link" href="#" onclick="changePage(-1); return false;">
+          <i class="bi bi-chevron-left"></i>
         </a>
       </li>
     `;
+
+    for (let i = 1; i <= totalPages; i++) {
+      html += `
+        <li class="page-item ${currentPage === i ? "active" : ""}">
+          <a class="page-link"
+             href="#"
+             onclick="goToPage(${i}); return false;">
+            ${i}
+          </a>
+        </li>
+      `;
     }
 
     html += `
-    <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
-      <a class="page-link" href="#" onclick="changePage(1); return false;">
-        <i class="bi bi-chevron-right"></i>
-      </a>
-    </li>
-  `;
+      <li class="page-item ${currentPage === totalPages ? "disabled" : ""}">
+        <a class="page-link" href="#" onclick="changePage(1); return false;">
+          <i class="bi bi-chevron-right"></i>
+        </a>
+      </li>
+    `;
 
     html += `
-      </ul>
-    </nav>
-  `;
+        </ul>
+      </nav>
+    `;
 
     container.innerHTML = html;
   }
@@ -554,5 +636,46 @@
     if (activeLink) {
       activeLink.classList.add("active");
     }
+
+    // ==========================
+    // Load data sesuai halaman
+    // ==========================
+    if (page === "pengaduan") {
+      loadActiveComplaints();
+    }
   }
+
+  function refreshDashboard() {
+    console.log("Refresh Dashboard", new Date());
+
+    loadTrendChart();
+    loadStatusSummary();
+  }
+
+  window.onload = function () {
+    refreshDashboard();
+
+    initializeNavigation();
+  };
+
+  function autoRefresh() {
+    if (!document.getElementById("page-dashboard").classList.contains("d-none")) {
+      refreshDashboard();
+    }
+
+    if (!document.getElementById("page-pengaduan").classList.contains("d-none")) {
+      loadActiveComplaints();
+    }
+  }
+  function autoRefresh() {
+    if (!document.getElementById("page-dashboard").classList.contains("d-none")) {
+      refreshDashboard();
+    }
+
+    if (!document.getElementById("page-pengaduan").classList.contains("d-none")) {
+      loadActiveComplaints();
+    }
+  }
+
+  setInterval(refreshDashboard, 30000);
 </script>

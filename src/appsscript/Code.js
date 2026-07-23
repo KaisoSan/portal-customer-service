@@ -14,14 +14,17 @@ const APP_CONFIG = {
 
   BRANCH: "Customer Service",
 
-  OFFICE: "BNI KC Situbondo",
+  OFFICE: "KC Situbondo",
 
   VERSION: "Build 1.3.0",
 
   PORTAL_URL:
     "https://script.google.com/macros/s/AKfycbzs-NXULF06YDHVSqUC996N6CLaxQk9nlnd7tCx6jRvu3vDL_hwK3hzAIkWAWDvnLYQ/exec",
 
-  LOGO: "https://drive.google.com/thumbnail?id=1sSUvDVs4cTTuwEaZvzKDuQbIGBaRfh46&sz=w1000",
+  LOGO: {
+    COLOR: "https://drive.google.com/thumbnail?id=1sSUvDVs4cTTuwEaZvzKDuQbIGBaRfh46&sz=w1000",
+    WHITE: "https://drive.google.com/thumbnail?id=1sIsWDOvz0VGBmc-vk0Z7kWcfX8AeDqCb&s=w1000",
+  },
 
   COPYRIGHT: "© 2026 PT Bank Negara Indonesia (Persero) Tbk.",
 
@@ -139,6 +142,56 @@ function getDashboardData() {
   }
 
   return result;
+}
+
+function getTrendChartData() {
+  const ss = SpreadsheetApp.openById(DATABASE.PENGADUAN_SHEET_ID);
+
+  const sheet = ss.getSheetByName(DATABASE.SHEET_NAME);
+
+  const data = sheet.getDataRange().getValues();
+
+  const counts = [0, 0, 0, 0, 0, 0, 0];
+
+  const today = new Date();
+
+  today.setHours(0, 0, 0, 0);
+
+  for (let i = 1; i < data.length; i++) {
+    const timestamp = new Date(data[i][0]);
+
+    timestamp.setHours(0, 0, 0, 0);
+
+    const diff = Math.floor((today - timestamp) / (1000 * 60 * 60 * 24));
+
+    if (diff >= 0 && diff < 30) {
+      counts[6 - diff]++;
+    }
+  }
+
+  const labels = [];
+
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date(today);
+
+    d.setDate(today.getDate() - i);
+
+    labels.push(
+      d.toLocaleDateString("id-ID", {
+        weekday: "short",
+      })
+    );
+  }
+
+  return {
+    labels,
+
+    values: counts,
+  };
+}
+
+function testTrend() {
+  Logger.log(getTrendChartData());
 }
 
 function getChartData() {

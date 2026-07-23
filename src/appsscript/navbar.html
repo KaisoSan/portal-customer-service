@@ -1,32 +1,13 @@
 <nav class="navbar navbar-expand-lg bg-white shadow-sm sticky-top">
+  <div class="container">
+    <a class="navbar-brand d-flex align-items-center" href="#">
+      <img src="<?= config.LOGO.COLOR ?>" class="portal-logo" alt="BNI" />
 
-    <div class="container">
+      <div class="ms-3">
+        <div class="portal-title">Portal Layanan Nasabah</div>
 
-        <a class="navbar-brand d-flex align-items-center" href="#">
-
-            <img
-                src="<?= config.LOGO ?>"
-                class="portal-logo"
-                alt="BNI">
-
-            <div class="ms-3">
-
-                <div class="portal-title">
-
-                    Portal Layanan Nasabah
-
-                </div>
-
-                <div class="portal-subtitle">
-
-                    <?= config.OFFICE ?>
-
-                </div>
-
-            </div>
-
-        </a>
-
-    </div>
-
+        <div class="portal-subtitle"><?= config.OFFICE ?></div>
+      </div>
+    </a>
+  </div>
 </nav>

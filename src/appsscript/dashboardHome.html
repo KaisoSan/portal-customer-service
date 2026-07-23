@@ -12,9 +12,9 @@
         Selamat Datang
       </div>
 
-      <h1 class="hero-title">Halo, Ossama 👋</h1>
+      <h1 class="hero-title">Halo, Kakak 👋</h1>
 
-      <p class="hero-subtitle">Selamat bekerja dan semoga harimu produktif.</p>
+      <p class="hero-subtitle">Selamat bekerja dan semangat Kakak.</p>
 
       <div class="hero-branch">
         <i class="bi bi-bank2"></i>
@@ -69,40 +69,67 @@
 
   <div class="row g-4 mt-4">
     <!-- Menunggu Verifikasi -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon warning">
-            <i class="bi bi-hourglass-split"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon warning">
+              <i class="bi bi-hourglass-split"></i>
+            </div>
+
+            <div class="premium-title-group">
+              <h6>Menunggu Verifikasi</h6>
+            </div>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Menunggu Verifikasi</h6>
           <h2 id="waitingComplaint">0</h2>
-          <small>Perlu diverifikasi</small>
+
+          <div class="premium-change">
+            <i class="bi bi-arrow-repeat"></i>
+
+            Sinkron Real-Time
+          </div>
         </div>
 
-        <div class="premium-footer">
-          <i class="bi bi-arrow-repeat"></i>
-          Update Live
+        <div class="premium-sparkline">
+          <svg viewBox="0 0 120 30" preserveAspectRatio="none">
+            <polyline
+              points="0,24 20,18 40,22 60,12 80,16 100,8 120,14"
+              fill="none"
+              stroke="#f59e0b"
+              stroke-width="3"
+              stroke-linecap="round"
+              stroke-linejoin="round"
+            />
+          </svg>
         </div>
       </div>
     </div>
 
     <!-- Diterima -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon" style="background: #ecfdf5; color: #16a34a">
-            <i class="bi bi-check-circle-fill"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon" style="background: #ecfdf5; color: #16a34a">
+              <i class="bi bi-check-circle-fill"></i>
+            </div>
+
+            <h6>Diterima</h6>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Diterima</h6>
           <h2 id="receivedComplaint">0</h2>
           <small>Sudah diterima</small>
         </div>
@@ -115,17 +142,23 @@
     </div>
 
     <!-- Diproses -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon" style="background: #eff6ff; color: #2563eb">
-            <i class="bi bi-gear-fill"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon" style="background: #eff6ff; color: #2563eb">
+              <i class="bi bi-gear-fill"></i>
+            </div>
+
+            <h6>Diproses</h6>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Diproses</h6>
           <h2 id="processComplaint">0</h2>
           <small>Sedang diproses</small>
         </div>
@@ -138,17 +171,23 @@
     </div>
 
     <!-- Menunggu TL -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon" style="background: #fef3c7; color: #d97706">
-            <i class="bi bi-arrow-repeat"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon" style="background: #fef3c7; color: #d97706">
+              <i class="bi bi-arrow-repeat"></i>
+            </div>
+
+            <h6>Menunggu TL</h6>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Menunggu TL</h6>
           <h2 id="followupComplaint">0</h2>
           <small>Menunggu tindak lanjut</small>
         </div>
@@ -161,17 +200,23 @@
     </div>
 
     <!-- Selesai -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon" style="background: #dcfce7; color: #15803d">
-            <i class="bi bi-clipboard-check-fill"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon" style="background: #dcfce7; color: #15803d">
+              <i class="bi bi-clipboard-check-fill"></i>
+            </div>
+
+            <h6>Selesai</h6>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Selesai</h6>
           <h2 id="finishedComplaint">0</h2>
           <small>Pengaduan selesai</small>
         </div>
@@ -184,17 +229,23 @@
     </div>
 
     <!-- Ditutup -->
-    <div class="col-xl-2 col-lg-4 col-md-6">
+    <div class="col-xl-4 col-lg-6 col-md-6">
       <div class="premium-card">
         <div class="premium-top">
-          <div class="premium-icon" style="background: #f3f4f6; color: #374151">
-            <i class="bi bi-lock-fill"></i>
+          <div class="premium-header-left">
+            <div class="premium-icon" style="background: #f3f4f6; color: #374151">
+              <i class="bi bi-lock-fill"></i>
+            </div>
+
+            <h6>Ditutup</h6>
           </div>
-          <span class="premium-live">LIVE</span>
+
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="premium-body">
-          <h6>Ditutup</h6>
           <h2 id="closedComplaint">0</h2>
           <small>Kasus ditutup</small>
         </div>
@@ -213,31 +264,31 @@
 
   <div class="row mt-4">
     <!-- Donut Chart -->
-    <div class="col-lg-6">
+    <div class="col-lg-8">
       <div class="stat-card chart-card premium-chart">
         <div class="chart-header">
           <div>
             <h5>
-              <i class="bi bi-pie-chart-fill text-warning"></i>
-              Distribusi Pengaduan
+              <i class="bi bi-graph-up-arrow text-warning"></i>
+              Trend Pengaduan
             </h5>
 
-            <small>Status pengaduan secara real-time</small>
+            <small>Jumlah pengaduan dalam 7 hari terakhir</small>
           </div>
 
-          <span class="premium-live">LIVE</span>
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div class="chart-container">
-          <canvas id="statusChart"></canvas>
+          <canvas id="trendChart"></canvas>
         </div>
-
-        <div id="chartLegend" class="chart-legend"></div>
       </div>
     </div>
 
     <!-- Ringkasan -->
-    <div class="col-lg-6">
+    <div class="col-lg-4">
       <div class="stat-card chart-card premium-chart">
         <div class="chart-header">
           <div>
@@ -249,7 +300,9 @@
             <small>Distribusi status pengaduan</small>
           </div>
 
-          <span class="premium-live">LIVE</span>
+          <button class="premium-menu">
+            <i class="bi bi-three-dots"></i>
+          </button>
         </div>
 
         <div id="statusSummary" class="summary-modern"></div>
