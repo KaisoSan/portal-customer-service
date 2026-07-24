@@ -97,8 +97,6 @@
   }
 
   function drawTrendChart(data) {
-    console.log("drawChart dipanggil");
-    console.log(data);
     const canvas = document.getElementById("trendChart");
     const ctx = canvas.getContext("2d");
 
@@ -185,44 +183,6 @@
         },
       },
     });
-  }
-  function loadSummary(data) {
-    const total = data.values.reduce((a, b) => a + b, 0);
-
-    const colors = ["#FFC107", "#198754", "#0D6EFD", "#F37021", "#20C997", "#212529"];
-
-    let html = "";
-
-    data.labels.forEach((label, index) => {
-      const value = data.values[index];
-
-      const percent = total === 0 ? 0 : Math.round((value / total) * 100);
-
-      html += `
-
-          <div class="summary-item">
-
-              <div class="summary-left">
-
-                  <span class="summary-dot"
-                        style="background:${colors[index]}"></span>
-
-                  ${label}
-
-              </div>
-
-              <div class="summary-value">
-
-                  ${value} (${percent}%)
-
-              </div>
-
-          </div>
-
-          `;
-    });
-
-    document.getElementById("statusSummary").innerHTML = html;
   }
 
   function loadActiveComplaints() {
@@ -318,7 +278,7 @@
         // Refresh dashboard setelah modal sudah tertutup
         google.script.run.withSuccessHandler(loadDashboard).getDashboardData();
 
-        loadChart();
+        refreshDashboard();
         loadActiveComplaints();
       })
       .updateComplaintStatus(currentComplaintNumber, status);
@@ -394,7 +354,7 @@
     });
     initializeTooltips();
   }
-  console.log(activeComplaintData.map((x) => x.status));
+
   function filterActiveComplaints() {
     const keyword = document.getElementById("complaintSearch").value.toLowerCase().trim();
 
@@ -667,15 +627,6 @@
       loadActiveComplaints();
     }
   }
-  function autoRefresh() {
-    if (!document.getElementById("page-dashboard").classList.contains("d-none")) {
-      refreshDashboard();
-    }
 
-    if (!document.getElementById("page-pengaduan").classList.contains("d-none")) {
-      loadActiveComplaints();
-    }
-  }
-
-  setInterval(refreshDashboard, 30000);
+  setInterval(autoRefresh, 30000);
 </script>
